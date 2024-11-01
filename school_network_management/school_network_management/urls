@@ -1,0 +1,106 @@
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import (
+    CategoryViewSet, SubCategoryViewSet, ServiceTypeViewSet, ChannelViewSet,
+    StateOfTicketViewSet, ImpactViewSet, UrgencyViewSet, PriorityViewSet,
+    TicketAssignedGroupViewSet, ResolutionCodeViewSet, ShipmentTypeViewSet, TicketViewSet
+)
+
+router = DefaultRouter()
+router.register(r'categories', CategoryViewSet)
+router.register(r'subcategories', SubCategoryViewSet)
+router.register(r'service-types', ServiceTypeViewSet)
+router.register(r'channels', ChannelViewSet)
+router.register(r'state-of-tickets', StateOfTicketViewSet)
+router.register(r'impacts', ImpactViewSet)
+router.register(r'urgencies', UrgencyViewSet)
+router.register(r'priorities', PriorityViewSet)
+router.register(r'ticket-assigned-groups', TicketAssignedGroupViewSet)
+router.register(r'resolution-codes', ResolutionCodeViewSet)
+router.register(r'shipment-types', ShipmentTypeViewSet)
+router.register(r'tickets', TicketViewSet)
+
+urlpatterns = [
+    path('', include(router.urls)),
+]
+
+
+
+
+
+
+
+
+
+# admin.py
+from django.contrib import admin
+from .models import (
+    Category, SubCategory, ServiceType, Channel, StateOfTicket,
+    Impact, Urgency, Priority, TicketAssignedGroup, ResolutionCode,
+    ShipmentType, Ticket
+)
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('category_id', 'name', 'status')
+    search_fields = ('name',)
+
+@admin.register(SubCategory)
+class SubCategoryAdmin(admin.ModelAdmin):
+    list_display = ('sub_category_id', 'name', 'category', 'status')
+    search_fields = ('name',)
+    list_filter = ('category',)
+
+@admin.register(ServiceType)
+class ServiceTypeAdmin(admin.ModelAdmin):
+    list_display = ('service_id', 'name', 'status')
+    search_fields = ('name',)
+
+@admin.register(Channel)
+class ChannelAdmin(admin.ModelAdmin):
+    list_display = ('channel_id', 'name', 'status')
+    search_fields = ('name',)
+
+@admin.register(StateOfTicket)
+class StateOfTicketAdmin(admin.ModelAdmin):
+    list_display = ('state_of_ticket_id', 'name', 'status')
+    search_fields = ('name',)
+
+@admin.register(Impact)
+class ImpactAdmin(admin.ModelAdmin):
+    list_display = ('impact_id', 'name', 'status')
+    search_fields = ('name',)
+
+@admin.register(Urgency)
+class UrgencyAdmin(admin.ModelAdmin):
+    list_display = ('urgency_id', 'name', 'status')
+    search_fields = ('name',)
+
+@admin.register(Priority)
+class PriorityAdmin(admin.ModelAdmin):
+    list_display = ('priority_id', 'name', 'status')
+    search_fields = ('name',)
+
+@admin.register(TicketAssignedGroup)
+class TicketAssignedGroupAdmin(admin.ModelAdmin):
+    list_display = ('Tg_id', 'name', 'status')
+    search_fields = ('name',)
+    filter_horizontal = ('group_numbers',)
+
+@admin.register(ResolutionCode)
+class ResolutionCodeAdmin(admin.ModelAdmin):
+    list_display = ('resolution_id', 'name', 'status')
+    search_fields = ('name',)
+
+@admin.register(ShipmentType)
+class ShipmentTypeAdmin(admin.ModelAdmin):
+    list_display = ('ship_id', 'name', 'status')
+    search_fields = ('name',)
+
+@admin.register(Ticket)
+class TicketAdmin(admin.ModelAdmin):
+    list_display = ('ticket_id', 'ticket_number', 'caller', 'category', 'priority', 'state_of_ticket', 'created_at', 'updated_at')
+    search_fields = ('ticket_number', 'caller__username')
+    list_filter = ('category', 'priority', 'state_of_ticket')
+    readonly_fields = ('ticket_number', 'created_at', 'updated_at')
+
