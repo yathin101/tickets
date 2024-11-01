@@ -1,0 +1,9 @@
+<!-- templates/branches/branch_list.html -->
+<h1>Branches</h1>
+<ul>
+    {% for branch in branches %}
+        <li>
+            <a href="{% url 'service_provider_form' branch.id %}">{{ branch.zone }} - {{ branch.name }}</a>
+        </li>
+    {% endfor %}
+</ul>
