@@ -1,0 +1,59 @@
+from rest_framework import viewsets
+from .models import (
+    Category, SubCategory, ServiceType, Channel, StateOfTicket, Impact,
+    Urgency, Priority, TicketAssignedGroup, ResolutionCode, ShipmentType, Ticket
+)
+from .serializers import (
+    CategorySerializer, SubCategorySerializer, ServiceTypeSerializer,
+    ChannelSerializer, StateOfTicketSerializer, ImpactSerializer, UrgencySerializer,
+    PrioritySerializer, TicketAssignedGroupSerializer, ResolutionCodeSerializer,
+    ShipmentTypeSerializer, TicketSerializer
+)
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+class SubCategoryViewSet(viewsets.ModelViewSet):
+    queryset = SubCategory.objects.all()
+    serializer_class = SubCategorySerializer
+
+class ServiceTypeViewSet(viewsets.ModelViewSet):
+    queryset = ServiceType.objects.all()
+    serializer_class = ServiceTypeSerializer
+
+class ChannelViewSet(viewsets.ModelViewSet):
+    queryset = Channel.objects.all()
+    serializer_class = ChannelSerializer
+
+class StateOfTicketViewSet(viewsets.ModelViewSet):
+    queryset = StateOfTicket.objects.all()
+    serializer_class = StateOfTicketSerializer
+
+class ImpactViewSet(viewsets.ModelViewSet):
+    queryset = Impact.objects.all()
+    serializer_class = ImpactSerializer
+
+class UrgencyViewSet(viewsets.ModelViewSet):
+    queryset = Urgency.objects.all()
+    serializer_class = UrgencySerializer
+
+class PriorityViewSet(viewsets.ModelViewSet):
+    queryset = Priority.objects.all()
+    serializer_class = PrioritySerializer
+
+class TicketAssignedGroupViewSet(viewsets.ModelViewSet):
+    queryset = TicketAssignedGroup.objects.all()
+    serializer_class = TicketAssignedGroupSerializer
+
+class ResolutionCodeViewSet(viewsets.ModelViewSet):
+    queryset = ResolutionCode.objects.all()
+    serializer_class = ResolutionCodeSerializer
+
+class ShipmentTypeViewSet(viewsets.ModelViewSet):
+    queryset = ShipmentType.objects.all()
+    serializer_class = ShipmentTypeSerializer
+
+class TicketViewSet(viewsets.ModelViewSet):
+    queryset = Ticket.objects.all()
+    serializer_class = TicketSerializer
