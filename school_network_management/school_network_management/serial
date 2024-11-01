@@ -1,0 +1,66 @@
+from rest_framework import serializers
+from .models import (
+    Category, SubCategory, ServiceType, Channel, StateOfTicket, Impact,
+    Urgency, Priority, TicketAssignedGroup, ResolutionCode, ShipmentType, Ticket
+)
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+class SubCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubCategory
+        fields = '__all__'
+
+class ServiceTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServiceType
+        fields = '__all__'
+
+class ChannelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Channel
+        fields = '__all__'
+
+class StateOfTicketSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StateOfTicket
+        fields = '__all__'
+
+class ImpactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Impact
+        fields = '__all__'
+
+class UrgencySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Urgency
+        fields = '__all__'
+
+class PrioritySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Priority
+        fields = '__all__'
+
+class TicketAssignedGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TicketAssignedGroup
+        fields = '__all__'
+
+class ResolutionCodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ResolutionCode
+        fields = '__all__'
+
+class ShipmentTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ShipmentType
+        fields = '__all__'
+
+class TicketSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ticket
+        fields = '__all__'
+
