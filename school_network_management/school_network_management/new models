@@ -1,0 +1,214 @@
+from django.db import models 
+import os
+import uuid
+from django.conf import settings
+from django.core.files import File 
+from io import BytesIO
+from django.contrib.auth.models import User ,Group 
+from datetime import date
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.models import AbstractUser
+from django.utils.translation import gettext as _
+from django.core.validators import RegexValidator
+
+
+
+class Category(models.Model):
+    category_id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=200,null=False, blank=False,unique = True)
+    status = models.BooleanField(default=True,editable = False)
+
+    def __str__(self):
+        return self.name
+
+class SubCategory(models.Model):
+    sub_category_id = models.BigAutoField(primary_key=True)
+    category = models.ForeignKey(Category,null=False, blank=False,on_delete=models.PROTECT)    
+    name = models.CharField(max_length=200,null=False, blank=False,unique = True)
+    status = models.BooleanField(default=True,editable = False)
+
+    def __str__(self):
+        return self.name
+
+class ServiceType(models.Model):
+    service_id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=200,null=False, blank=False,unique = True)
+    status = models.BooleanField(default=True,editable = False)
+
+    def __str__(self):
+        return self.name
+
+class Channel(models.Model):
+    channel_id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=200,null=False, blank=False,unique = True)
+    status = models.BooleanField(default=True,editable = False)
+
+    def __str__(self):
+        return self.name
+    
+class StateOfTicket(models.Model):
+    state_of_ticket_id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=200,null=False, blank=False,unique = True)
+    status = models.BooleanField(default=True,editable = False)
+
+    def __str__(self):
+        return self.name
+
+class Impact(models.Model):
+    impact_id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=200,null=False, blank=False,unique = True)
+    status = models.BooleanField(default=True,editable = False)
+
+    def __str__(self):
+        return self.name
+
+class Urgency(models.Model):
+    urgency_id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=200,null=False, blank=False,unique = True)
+    status = models.BooleanField(default=True,editable = False)
+
+    def __str__(self):
+        return self.name
+
+class Priority(models.Model):
+    priority_id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=200,null=False, blank=False,unique = True)
+    status = models.BooleanField(default=True,editable = False)
+
+    def __str__(self):
+        return self.name
+
+class TicketAssignedGroup(models.Model):
+    Tg_id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=200,null=False, blank=False,unique = True)
+    group_numbers = models.ManyToManyField(User,null=False, blank=False)
+    status = models.BooleanField(default=True,editable = False)
+
+    def __str__(self):
+        return self.name
+
+class ResolutionCode(models.Model):
+    resolution_id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=200,null=False, blank=False,unique = True)
+    status = models.BooleanField(default=True,editable = False)
+
+    def __str__(self):
+        return self.name
+
+class ShipmentType(models.Model):
+    ship_id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=200,null=False, blank=False,unique = True)
+    status = models.BooleanField(default=True,editable = False)
+
+    def __str__(self):
+        return self.name
+
+class Ticket(models.Model):
+    ticket_id = models.BigAutoField(primary_key=True)
+    ticket_number = models.CharField(max_length=200, blank=True, null=True)
+    caller = models.ForeignKey(User, related_name="caller_name", null=True, blank=True, on_delete=models.PROTECT)
+    category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.PROTECT)
+    subcategory = models.ForeignKey(SubCategory, null=True, blank=True, on_delete=models.PROTECT)
+    servicetype = models.ForeignKey(ServiceType, null=True, blank=True, on_delete=models.PROTECT)
+
+    # Location Detailes
+    # state = models.ForeignKey(State, null=True, blank=True, on_delete=models.PROTECT)
+    # zone =  models.ForeignKey(Zone, null=True, blank=True, on_delete=models.PROTECT)
+    # branch = models.ForeignKey(Location, null=True, blank=True, on_delete=models.PROTECT)
+    # department = models.ForeignKey(Department, null=True, blank=True, on_delete=models.PROTECT)
+
+    # Asset Detailes 
+    # serial_number = models.ForeignKey(SerialNumber,on_delete=models.PROTECT,blank=True, null=True)
+    # type = models.ForeignKey(AssetType,on_delete=models.PROTECT,blank=True, null=True)   
+    # make = models.ForeignKey(AssetMake,on_delete=models.PROTECT,blank=True, null=True)   
+    # model =  models.ForeignKey(AssetModel,on_delete=models.PROTECT,blank=True, null=True)
+    
+    channel = models.ForeignKey(Channel, null=True, blank=True, on_delete=models.PROTECT)
+    state_of_ticket = models.ForeignKey(StateOfTicket, null=True, blank=True, on_delete=models.PROTECT)
+    impact = models.ForeignKey(Impact, null=True, blank=True, on_delete=models.PROTECT)
+    urgency = models.ForeignKey(Urgency, null=True, blank=True, on_delete=models.PROTECT)
+    priority = models.ForeignKey(Priority, null=True, blank=True, on_delete=models.PROTECT)
+    AssignmentGroup =  models.ForeignKey(TicketAssignedGroup, null=True, blank=True, on_delete=models.PROTECT)
+    AssignedTo = models.ForeignKey(User, related_name="AssignedTo", null=True, blank=True, on_delete=models.PROTECT)
+     
+    Short_description = models.CharField(max_length=255, null=True, blank=True)
+    description = models.TextField(null=True,blank=True)
+
+    resolution_code =  models.ForeignKey(ResolutionCode, null=True, blank=True, on_delete=models.PROTECT)
+    resolution_notes = models.TextField(null=True,blank=True)
+    resolved_by =  models.ForeignKey(User, related_name="resolved_by", null=True, blank=True, on_delete=models.PROTECT)
+    # resolved_date = models.DateTimeField(auto_now=True,editable=False)
+    resolved_date = models.DateField(null=True,blank=True)
+
+
+    part_waranty_status = models.BooleanField(blank=True, null=True,default=None)
+
+    reported_problem = models.TextField(null=True,blank=True)
+
+    part_dispatch_date = models.DateField(null=True,blank=True)
+
+    #====== Service Vendor Detailes ==================================
+    Service_vendor_name =  models.CharField(max_length=200, blank=True, null=True)
+    service_job_id =  models.CharField(max_length=100, blank=True, null=True)
+    service_vendor_location =  models.CharField(max_length=200, blank=True, null=True)
+    service_vendor_received_date =  models.DateField(null=True,blank=True)
+    service_center_description = models.TextField(null=True,blank=True)
+    repair_status = models.CharField(max_length=100, blank=True, null=True)
+
+    shipment_type =  models.ForeignKey(ShipmentType, null=True, blank=True, on_delete=models.PROTECT)
+
+    # repair cost detailes  ==================
+    service_charges = models.FloatField(null=True,blank=True)
+    new_part = models.CharField(max_length=200, blank=True, null=True)
+    new_part_description = models.TextField(null=True,blank=True)
+    new_part_charges = models.FloatField(null=True,blank=True)
+    # invoice_number =  models.ForeignKey(InvoiceNumber, null=True, blank=True, on_delete=models.PROTECT)
+    shipment_charges = models.FloatField(null=True,blank=True)
+    total_amount = models.FloatField(null=True,blank=True)
+    paid_details = models.TextField(null=True,blank=True)
+
+
+    created_by = models.ForeignKey(User, null=True,related_name="created_by_user", blank=True, on_delete=models.PROTECT,editable=False)
+    updated_by = models.ForeignKey(User, null=True,related_name="updated_by_user", blank=True, on_delete=models.PROTECT,editable=False)
+
+    created_at = models.DateTimeField(auto_now_add=True,editable=False)
+    updated_at = models.DateTimeField(auto_now=True,editable=False)
+
+    active = models.BooleanField(default=True,editable = False)
+
+    def __str__(self):
+        return self.ticket_number
+    
+    def save(self,*args, **kwargs):
+
+        if not self.ticket_number and self.ticket_id is None:
+            last_ticket = Ticket.objects.all().order_by("-ticket_id").first()
+            last_pk = 0
+            if last_ticket:
+                last_pk = last_ticket.ticket_id
+        
+            self.ticket_number = "TKT" + str(last_pk+1).zfill(7)
+
+        # self.type = self.SerialNo.type
+        # self.make  = self.SerialNo.make
+    
+            
+        return super().save(*args,**kwargs)
+    
+    # def save(self):
+    #     if not self.ticket_number and self.ticket_id is None:
+    #         last_ticket = Ticket.objects.all().order_by("-ticket_id").first()
+    #         last_pk = 0
+    #         if last_ticket:
+    #             last_pk = last_ticket.ticket_id
+        
+    #         self.ticket_number = "TKT" + str(last_pk+1).zfill(7)
+
+    #     super(Ticket, self).save()
+
+    
+    
+
+
+
